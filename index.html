@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Facturas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Facturas</h1>
+        <form id="invoiceForm">
+            <label for="clientName">Nombre del Cliente:</label>
+            <input type="text" id="clientName" name="clientName" required>
+
+            <label for="clientEmail">Correo del Cliente:</label>
+            <input type="email" id="clientEmail" name="clientEmail" required>
+
+            <label for="clientPassword">Contraseña del Cliente:</label>
+            <input type="password" id="clientPassword" name="clientPassword" required>
+
+            <label for="invoiceDate">Fecha:</label>
+            <input type="date" id="invoiceDate" name="invoiceDate" required>
+
+            <div id="items">
+                <h2>Items</h2>
+                <div class="item">
+                    <label for="articleName">Nombre del Artículo:</label>
+                    <input type="text" name="articleName" required>
+                    
+                    <label for="description">Descripción:</label>
+                    <input type="text" name="description" required>
+
+                    <label for="quantity">Cantidad:</label>
+                    <input type="number" name="quantity" required>
+
+                    <label for="price">Precio:</label>
+                    <input type="number" name="price" required>
+                </div>
+            </div>
+            <button type="button" id="addItem">Añadir Item</button>
+            <button type="submit">Generar Factura</button>
+        </form>
+    </div>
+    <div class="container" id="invoiceSection">
+        <h1>Factura Generada</h1>
+        <div id="invoiceOutput"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
