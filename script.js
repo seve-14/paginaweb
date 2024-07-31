@@ -1,62 +1,106 @@
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('invoiceForm');
-    const itemsContainer = document.getElementById('items');
-    const addItemButton = document.getElementById('addItem');
-    const invoiceOutput = document.getElementById('invoiceOutput');
-    const invoiceSection = document.getElementById('invoiceSection');
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    addItemButton.addEventListener('click', function() {
-        const newItem = document.createElement('div');
-        newItem.classList.add('item');
-        newItem.innerHTML = `
-            <label for="articleName">Nombre del Artículo:</label>
-            <input type="text" name="articleName" required>
-            
-            <label for="description">Descripción:</label>
-            <input type="text" name="description" required>
-            
-            <label for="quantity">Cantidad:</label>
-            <input type="number" name="quantity" required>
-            
-            <label for="price">Precio:</label>
-            <input type="number" name="price" required>
+    if (username === 'mundonet' && password === 'mundonet123456') {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('invoiceForm').style.display = 'block';
+    } else {
+        alert('Usuario o contraseña incorrectos');
+    }
+});
+
+document.getElementById('addProduct').addEventListener('click', function() {
+    const productDiv = document.createElement('div');
+    productDiv.classList.add('product');
+
+    const productLabel = document.createElement('label');
+    productLabel.setAttribute('for', 'product');
+    productLabel.textContent = 'Producto:';
+    productDiv.appendChild(productLabel);
+
+    const productInput = document.createElement('input');
+    productInput.classList.add('productName');
+    productInput.setAttribute('type', 'text');
+    productInput.required = true;
+    productDiv.appendChild(productInput);
+
+    const priceLabel = document.createElement('label');
+    priceLabel.setAttribute('for', 'price');
+    priceLabel.textContent = 'Precio:';
+    productDiv.appendChild(priceLabel);
+
+    const priceInput = document.createElement('input');
+    priceInput.classList.add('productPrice');
+    priceInput.setAttribute('type', 'number');
+    priceInput.required = true;
+    productDiv.appendChild(priceInput);
+
+    const emailLabel = document.createElement('label');
+    emailLabel.setAttribute('for', 'email');
+    emailLabel.textContent = 'Correo:';
+    productDiv.appendChild(emailLabel);
+
+    const emailInput = document.createElement('input');
+    emailInput.classList.add('productEmail');
+    emailInput.setAttribute('type', 'email');
+    emailInput.required = true;
+    productDiv.appendChild(emailInput);
+
+    const passwordLabel = document.createElement('label');
+    passwordLabel.setAttribute('for', 'userPassword');
+    passwordLabel.textContent = 'Contraseña:';
+    productDiv.appendChild(passwordLabel);
+
+    const passwordInput = document.createElement('input');
+    passwordInput.classList.add('productPassword');
+    passwordInput.setAttribute('type', 'password');
+    passwordInput.required = true;
+    productDiv.appendChild(passwordInput);
+
+    document.getElementById('products').appendChild(productDiv);
+});
+
+document.getElementById('invoiceForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const products = document.getElementsByClassName('productName');
+    const prices = document.getElementsByClassName('productPrice');
+    const emails = document.getElementsByClassName('productEmail');
+    const passwords = document.getElementsByClassName('productPassword');
+    const date = new Date();
+
+    document.getElementById('invoiceDate').textContent = `Fecha: ${date.toLocaleDateString()} Hora: ${date.toLocaleTimeString()}`;
+
+    let total = 0;
+    const tbody = document.querySelector('#invoiceDetails tbody');
+    tbody.innerHTML = '';
+
+    for (let i = 0; i < products.length; i++) {
+        const productName = products[i].value;
+        const productPrice = parseFloat(prices[i].value);
+        const productEmail = emails[i].value;
+        const productPassword = passwords[i].value;
+        total += productPrice;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${productName}</td>
+            <td>$${productPrice.toFixed(2)}</td>
+            <td>${productEmail}</td>
+            <td>${productPassword}</td>
         `;
-        itemsContainer.appendChild(newItem);
-    });
+        tbody.appendChild(row);
+    }
 
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
+    document.getElementById('invoiceTotal').textContent = `Total: $${total.toFixed(2)}`;
 
-        const clientName = document.getElementById('clientName').value;
-        const clientEmail = document.getElementById('clientEmail').value;
-        const clientPassword = document.getElementById('clientPassword').value;
-        const invoiceDate = document.getElementById('invoiceDate').value;
+    document.getElementById('popup').style.display = 'flex';
+});
 
-        const items = [];
-        document.querySelectorAll('#items .item').forEach(function(item) {
-            const articleName = item.querySelector('input[name="articleName"]').value;
-            const description = item.querySelector('input[name="description"]').value;
-            const quantity = item.querySelector('input[name="quantity"]').value;
-            const price = item.querySelector('input[name="price"]').value;
-            items.push({ articleName, description, quantity, price });
-        });
-
-        let invoiceHTML = `<h2>Factura</h2>`;
-        invoiceHTML += `<p><strong>Nombre de la Empresa:</strong> MUNDO NET</p>`;
-        invoiceHTML += `<p><strong>Nombre del Cliente:</strong> ${clientName}</p>`;
-        invoiceHTML += `<p><strong>Correo del Cliente:</strong> ${clientEmail}</p>`;
-        invoiceHTML += `<p><strong>Contraseña del Cliente:</strong> ${clientPassword}</p>`;
-        invoiceHTML += `<p><strong>Fecha:</strong> ${invoiceDate}</p>`;
-        invoiceHTML += `<table border="1"><tr><th>Nombre del Artículo</th><th>Descripción</th><th>Cantidad</th><th>Precio</th></tr>`;
-
-        items.forEach(function(item) {
-            invoiceHTML += `<tr><td>${item.articleName}</td><td>${item.description}</td><td>${item.quantity}</td><td>${item.price}</td></tr>`;
-        });
-
-        invoiceHTML += `</table>`;
-
-        invoiceOutput.innerHTML = invoiceHTML;
-        invoiceSection.style.display = 'block'; // Mostrar la sección de la factura
-    });
+document.getElementById('closePopup').addEventListener('click', function() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('invoiceForm').style.display = 'none';
+    document.getElementById('invoice').style.display = 'block';
 });
